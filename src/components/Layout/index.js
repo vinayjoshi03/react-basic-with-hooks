@@ -4,15 +4,14 @@ import HeaderComponent from './Header';
 import FooterComponent from './Footer';
 
 //const bootstrap = require('bootstrap');
-const Layout = ({children}) => {
-    console.log(children);
+const Layout = ({ children }) => {
     //const SimpleHOC = AuxilaryComponent(children);
     return (
         <div className={"container-md"}>
             <HeaderComponent />
-           
-                {children}
-            
+
+            {children}
+
             <FooterComponent />
         </div>
     )

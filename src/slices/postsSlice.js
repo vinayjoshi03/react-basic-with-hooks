@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+let initialState = {
     posts: [{
         id: Math.random(-10000),
         title: 'post 1'
@@ -15,10 +15,12 @@ export const postSlice = createSlice({
     reducers: {
         getPosts: (state) => {
 
+        },
+        addPost: (state, payload) => {
+            //state.posts = [...state.posts, payload];
+            state.posts.push(payload.payload);
         }
     }
 });
-console.log('postSlice--->', postSlice.getInitialState());
-
-export const { getPosts } = postSlice.actions;
+export const { getPosts, addPost } = postSlice.actions;
 export default postSlice.reducer;
