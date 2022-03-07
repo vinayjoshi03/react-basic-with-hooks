@@ -33,7 +33,7 @@ const Posts = () => {
         }
         return (
             <>
-                <ModelBoxComponent title={'Model Title'} body={showPostForm()} footer={"aasdfasfsd"}/>
+                <ModelBoxComponent title={'Create new post'} body={showPostForm()}/>
                 <table className="table">
                     <thead>
                         <tr>
