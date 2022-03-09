@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import AuxilaryComponent from '../Hoc/AuxilaryComponent';
 import { useSelector, useDispatch } from 'react-redux'
-
+import { deletePost } from '../../slices/postsSlice';
 import { showModelBox } from '../../slices/global';
 import ModelBoxComponent  from '../ModelBox';
 import AddPostFormComponent from './AddPostFormComponent';
@@ -15,6 +15,11 @@ const Posts = () => {
     const createPostHandler = () => {
         dispatch(showModelBox());
     }
+
+    const onDeleteHandler = useCallback((uniqueid)=>{
+        console.log('On delete handler-->', uniqueid);
+        dispatch(deletePost({id:uniqueid}));
+    });
     
     const showAllPosts = (allPosts) => {
         let rowId = 1;
@@ -22,9 +27,12 @@ const Posts = () => {
             const indexid = rowId;
             rowId = indexid + 1;
             return (
-                <tr key={shortid.generate()}>
-                    <th scope="col">{indexid}</th>
-                    <th scope="col">{index.title}</th>
+                <tr key={index.id}>
+                    <td scope="col">{indexid}</td>
+                    <td scope="col">{index.title}</td>
+                    <td>
+                        <button id={index.id} onClick={(e)=>{onDeleteHandler(index.id)}} value='Delete'> Delete </button>
+                    </td>
                 </tr>
             )
         });
@@ -39,6 +47,7 @@ const Posts = () => {
                         <tr>
                             <th scope="col">#</th>
                             <th scope="col">Title</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,12 +58,9 @@ const Posts = () => {
         )
     }
     return (
-        <>
-            
-            Post Component
-            
+        <> 
+            Post Component  
             <input type={"button"} value='Create New Post' onClick={() => { createPostHandler() }} />
-
             {showAllPosts(allStates.posts.posts)}
         </>
     )

@@ -14,20 +14,18 @@ const AddPostFormComponent = () => {
         }
         dispatch(hideModelBox());
     });
- const [counter, reducerDispatch] = useReducer((state, action)=>{
-     console.log('Initial-->',state)
-     if(action.type == 'Increment') {
-        state = state+1;
-        console.log('incrmental-->',state)
-     }
-    return state;
- }, 0)
+    const [counter, reducerDispatch] = useReducer((state, action)=>{
+        if(action.type == 'Increment') {
+            state = state+1;
+        }
+        return state;
+    }, 0);
     return (
         <>
             <form onSubmit={(e) => { addPostActionHandler(e) }}>
                 <div className={"mb-3 row"}>
-                    <label for="title" class="col-sm-2 col-form-label">Title {counter}</label>
-                    <div class="col-sm-10">
+                    <label htmlFor="title" className="col-sm-2 col-form-label">Title {counter}</label>
+                    <div className="col-sm-10">
                         <input 
                         type="text" 
                         className="form-control" 
@@ -37,8 +35,8 @@ const AddPostFormComponent = () => {
                     </div>
                 </div>
                 <div className={"mb-3 row"}>
-                    <label for="title" class="col-sm-2 col-form-label">&nbsp;</label>
-                    <div class="col-sm-10">
+                    <label htmlFor="title" className="col-sm-2 col-form-label">&nbsp;</label>
+                    <div className="col-sm-10">
                         <button type="submit" className="btn btn-primary">Create post</button> &nbsp;
                         <button onClick={() => { dispatch(hideModelBox()); reducerDispatch({'type':'Increment'}) }} type="button" className="btn btn-primary">Close</button>
                     </div>

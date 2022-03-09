@@ -1,9 +1,9 @@
-import React from 'react'
-import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-import HeaderComponent from './Header';
-import FooterComponent from './Footer';
+import React from "react"
+import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+import HeaderComponent from "./Header";
+import FooterComponent from "./Footer";
 
-//const bootstrap = require('bootstrap');
+//const bootstrap = require("bootstrap");
 const Layout = ({ children }) => {
     //const SimpleHOC = AuxilaryComponent(children);
     return (
