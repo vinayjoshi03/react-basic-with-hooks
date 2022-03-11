@@ -3,6 +3,7 @@ import { addPost } from '../../slices/postsSlice';
 import { showModelBox, hideModelBox } from '../../slices/global';
 import { useSelector, useDispatch } from 'react-redux'
 const shortid = require('shortid');
+console.log("=====>",process.env);
 
 const AddPostFormComponent = () => {
     const [postTitle, setpostTitle] = useState('');
@@ -22,6 +23,9 @@ const AddPostFormComponent = () => {
     }, 0);
     return (
         <>
+            <div>
+                <code>{JSON.stringify(process.env)}</code>
+            </div>
             <form onSubmit={(e) => { addPostActionHandler(e) }}>
                 <div className={"mb-3 row"}>
                     <label htmlFor="title" className="col-sm-2 col-form-label">Title {counter}</label>
