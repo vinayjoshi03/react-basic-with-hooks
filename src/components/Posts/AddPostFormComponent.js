@@ -1,10 +1,18 @@
-import React, { useState, useEffect, useCallback, useReducer } from "react";
+import React, { useState, useEffect, useCallback, useReducer, useContext } from "react";
 import { addPost } from '../../slices/postsSlice';
 import { showModelBox, hideModelBox } from '../../slices/global';
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 const shortid = require('shortid');
-console.log("=====>",process.env);
-
+const top100Films = [
+    { label: 'Technology', id: 22343 },
+    { label: 'The Godfather', year: 1972 },
+    { label: 'The Godfather: Part II', year: 1974 },
+    { label: 'The Dark Knight', year: 2008 },
+    { label: '12 Angry Men', year: 1957 },
+    { label: "Schindler's List", year: 1993 },
+  ];
 const AddPostFormComponent = () => {
     const [postTitle, setpostTitle] = useState('');
     const dispatch = useDispatch();
@@ -21,6 +29,8 @@ const AddPostFormComponent = () => {
         }
         return state;
     }, 0);
+    //const contestObj = useContext();
+    //console.log(contestObj);
     return (
         <>
             <div>
@@ -39,12 +49,25 @@ const AddPostFormComponent = () => {
                     </div>
                 </div>
                 <div className={"mb-3 row"}>
+                    <label htmlFor="title" className="col-sm-2 col-form-label">Movie</label>
+                    <div className="col-sm-10">
+                        <Autocomplete
+                            disablePortal
+                            id="combo-box-demo"
+                            options={top100Films}
+                            sx={{ width: 300 }}
+                            renderInput={(params) => <TextField {...params} label="Movie" />}
+                        />
+                    </div>
+                </div>
+                <div className={"mb-3 row"}>
                     <label htmlFor="title" className="col-sm-2 col-form-label">&nbsp;</label>
                     <div className="col-sm-10">
                         <button type="submit" className="btn btn-primary">Create post</button> &nbsp;
                         <button onClick={() => { dispatch(hideModelBox()); reducerDispatch({'type':'Increment'}) }} type="button" className="btn btn-primary">Close</button>
                     </div>
                 </div>
+                
             </form>
         </>
     )

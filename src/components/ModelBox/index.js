@@ -1,24 +1,46 @@
 import React from "react";
-import Modal from "react-bootstrap/Modal";
-import ModalBody from "react-bootstrap/ModalBody";
-import ModalHeader from "react-bootstrap/ModalHeader";
-import ModalFooter from "react-bootstrap/ModalFooter";
-import ModalTitle from "react-bootstrap/ModalTitle";
 import { useDispatch, useSelector } from "react-redux";
 import { showModelBox } from '../../slices/global';
-const ModelBoxComponent  = ({title, body, footer}) => {
-    const globalStates = useSelector((state)=>{return state.global});
-    //console.log('globalStates--->', globalStates);
-    const showModel = globalStates.showModelBox
-    return (
-        <Modal show={showModel}>
-          <ModalHeader>
-            <ModalTitle>{title}</ModalTitle>
-          </ModalHeader>
-          <ModalBody>{body}</ModalBody>
-          {(footer != undefined)? <ModalFooter>footer</ModalFooter>:null}
-        </Modal>
-      );
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+const ModelBoxComponent = ({ title, body, footer }) => {
+  const globalStates = useSelector((state) => { return state.global });
+  //console.log('globalStates--->', globalStates);
+  const showModel = globalStates.showModelBox;
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    borderRadius: '5px',
+    pt: 2,
+    px: 4,
+    pb: 3,
+  };
+  return (
+    // <Modal show={showModel}>
+    //   <ModalHeader>
+    //     <ModalTitle>{title}</ModalTitle>
+    //   </ModalHeader>
+    //   <ModalBody>{body}</ModalBody>
+    //   {(footer != undefined)? <ModalFooter>footer</ModalFooter>:null}
+    // </Modal>
+
+    <Modal
+      open={showModel}
+      //onClose={handleClose}
+      aria-labelledby="parent-modal-title"
+      aria-describedby="parent-modal-description"
+    >
+      <Box sx={{ ...style, width: 400 }}>
+        {body}
+      </Box>
+    </Modal>
+  );
 }
 
 export default ModelBoxComponent;

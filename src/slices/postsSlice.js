@@ -3,8 +3,10 @@ import { createSlice, current } from "@reduxjs/toolkit";
 let initialState = {
     posts: [{
         id: 'ssdfsdfsdfsdfsdsd',
-        title: 'post 1'
+        title: 'post 1',
+        postCategoryId:null,
     }],
+
     errors: {}
 
 }
