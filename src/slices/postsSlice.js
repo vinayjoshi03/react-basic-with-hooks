@@ -20,7 +20,7 @@ export const postSlice = createSlice({
         },
         addPost: (state, payload) => {
             //state.posts = [...state.posts, payload];
-            state.posts.push(payload.payload);
+            state.posts.push({id:payload.payload.id, title: payload.payload.data.postTitle});
         },
         deletePost: (state, payload) => {
             //const { id } = payload;

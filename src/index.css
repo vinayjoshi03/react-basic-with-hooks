@@ -17,6 +17,7 @@ code {
 }
 .leftmenu-width{
   width:200px;
+  min-height:700px;
 }
 @media (max-width: 600px) {
   .asdfsafsdfsdf {
