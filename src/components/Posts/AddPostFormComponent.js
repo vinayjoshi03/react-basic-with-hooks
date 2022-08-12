@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useCallback} from "react";
+import React, { useState, useReducer, useCallback } from "react";
 import { addPost } from '../../slices/postsSlice';
 import { hideModelBox } from '../../slices/global';
 import { useDispatch } from 'react-redux';
@@ -7,75 +7,26 @@ import Button from '@mui/material/Button';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import addPostConfig from './AddPostConfig';
+import validateFields from "../../util/validationCommon";
 const shortid = require('shortid');
 const AddPostFormComponent = () => {
-    const [formFieldData, setFieldConfig] = useState({});
-    const [titleError, settitleError] = useState({
-        postTitle: {
-            errorMessage: '',
-            error: false
-        },
-        postCategory: {
-            errorMessage: '',
-            error: false
-        }
-
-    });
+    const [formFieldData, setFieldConfig] = useState();
+    const [titleError, settitleError] = useState({});
     const [isDisabled, setisDisabled] = useState(false);
     //const [error, setError] = useState(false);
     const dispatch = useDispatch();
     const { postTitle, postCategory } = addPostConfig;
-    const validation = useCallback((dataObj) => {
-        const AllRequiredFields = Object.values(addPostConfig).filter(item => { return onlyRequiredFields(item) });
-        var isError = false;
-        AllRequiredFields.map(async (item) => {
+    const [isTouched, setIsTouch] = useState();
 
-            if (dataObj[item.id] === undefined || checkLength(dataObj[item.id]) === 0) {
-                if (!isError) {
-                    isError = true;
-                }
-                await settitleError({ ...titleError, [item.id]: { errorMessage: item.helperText, error: true } });
-            }
-        });
-        const result = Object.values(titleError).every((e) => (e.error === true))
-        return isError;
-    },[formFieldData]);
-    function checkLength(value) {
-
-        switch (value.constructor.name) {
-            case "String":
-                return value.length;
-            case "Object":
-                return Object.keys(value).length;
-            default:
-                return null;
-
-        }
-    }
-    function onlyRequiredFields(item) {
-        if (item.required === true) {
-            return item;
-        }
-    }
+   
     const addPostActionHandler = (e) => {
         e.preventDefault();
-        //e.preventDefault();
-        let isError = false;
-        if (Object.keys(formFieldData).length <= 0) {
-            settitleError({
-                ...titleError, [postTitle.id]: {
-                    errorMessage: 'Please enter title',
-                    error: true
-                }, [postCategory.id]: {
-                    errorMessage: 'Please select category',
-                    error: true
-                }
-            })
-            isError = true;
+        console.log(formFieldData);
+        const errors = validateFields(formFieldData, addPostConfig);
+        console.log('On submit errors-->',errors);
+        if(errors.length !== 0) {
+            settitleError(errors);
         } else {
-            isError = validation(formFieldData);
-        }
-        if (isError === false) {
             dispatch(addPost({ id: shortid.generate(), data: formFieldData }));
             //setisDisabled(false);
             //settitleError('');
@@ -83,32 +34,24 @@ const AddPostFormComponent = () => {
             dispatch(hideModelBox());
         }
     };
-    const fieldOnchage = async (event, fieldValue = undefined) => {
-        const fieldName = (event.target.id !== 'postTitle') ? 'postCategory' : event.target.id;
 
-        //console.log(fieldName);
-        const value = (fieldValue) ? fieldValue : event.target.value;
-        await setFieldConfig({ ...formFieldData, [fieldName]: value });
-        let setError, errorText;
-        if(checkLength(value) === 0) {
-            setError = true; 
-            errorText = addPostConfig[fieldName].helperText;
+    const onChangeHandler = (field, value, validateSingle=false) => {
 
+        console.log("Field-->", field, "value-->", value);
+        setFieldConfig({ ...formFieldData, [field]:value });
+        let errors = null;
+        if(validateSingle) {
+            console.log('Single-->');
+            errors = validateFields({[field]:value}, addPostConfig, true);
         } else {
-            setError = false;
-            errorText='';
+            console.log('multiple-->');
+            errors = validateFields(formFieldData, addPostConfig);
         }
-        settitleError({
-            ...titleError, [fieldName]: {
-                errorMessage: errorText,
-                error: setError
-            }
-        });
-        
-    }
-
-
-
+        console.log(errors);
+        if(errors !== null) {
+            settitleError(errors);
+        }
+    } 
     const [counter, reducerDispatch] = useReducer((state, action) => {
         if (action.type == 'Increment') {
             state = state + 1;
@@ -129,33 +72,38 @@ const AddPostFormComponent = () => {
             autoComplete="off"
         >
             <form onSubmit={e => addPostActionHandler(e)} >
+                {JSON.stringify(formFieldData)} {JSON.stringify(isTouched)}
                 <div>
                     <TextField
-                        helperText={titleError.postTitle.errorMessage}
+                        helperText={titleError.postTitle}
                         name={postTitle.postTitle}
-                        error={titleError.postTitle.error}
+                        error={(titleError.postTitle !== undefined)? true:false}
                         autoComplete={postTitle.autoComplete}
-                        onChange={(e) => { fieldOnchage(e) }}
+                        onChange={(e) => { onChangeHandler(e.target.id, e.target.value); }}
+                        onFocus={(e)=>{setIsTouch({...isTouched, [e.target.id]: true})}}
+                        // onBlur={(e)=>{onChangeHandler(e.target.id, e.target.value, true);}}
                         id={postTitle.id}
                         label={postTitle.label}
                         variant={postTitle.variant}
                         type={postTitle.type}
-
-                    />
+                    /> 
                 </div>
-                <div >
+                <div>
                     <Autocomplete
-                        disablePortal
+                        
                         id={postCategory.id}
-                        onChange={(e, value) => { fieldOnchage(e, value) }}
+                        onChange={(e, value) => { onChangeHandler("postCategory", value.id); }}
                         options={top100Films}
+                        getOptionLabel={option => option.label}
                         sx={{ width: 300 }}
+                        
+                        onFocus={(e)=>{setIsTouch({...isTouched, "postCategory": true})}}
+                        // onBlur={(e)=>{onChangeHandler("postCategory", '', true);}}
                         renderInput={(params) => <TextField
-                            helperText={titleError.postCategory.errorMessage}
-                            error={titleError.postCategory.error}
+                            helperText={titleError.postCategory}
+                            error={(titleError.postCategory !== undefined)?true:false}
                             id={postCategory.id} {...params}
                             label="Movie" />}
-
                     />
                 </div>
                 <div >

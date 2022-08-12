@@ -4,7 +4,7 @@ let initialState = {
     posts: [{
         id: 'ssdfsdfsdfsdfsdsd',
         title: 'post 1',
-        postCategoryId:null,
+        postCategoryId:1,
     }],
 
     errors: {}
@@ -19,8 +19,11 @@ export const postSlice = createSlice({
 
         },
         addPost: (state, payload) => {
+            console.log(payload);
             //state.posts = [...state.posts, payload];
-            state.posts.push({id:payload.payload.id, title: payload.payload.data.postTitle});
+            console.log(payload);
+            const { payload: { data: { postTitle, postCategory } } } = payload;
+            state.posts.push({id:payload.payload.id, title: postTitle, postCategoryId: postCategory});
         },
         deletePost: (state, payload) => {
             //const { id } = payload;

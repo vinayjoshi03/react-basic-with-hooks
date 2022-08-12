@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { showModelBox } from '../../slices/global';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
+import Divider from '@mui/material/Divider';
 const ModelBoxComponent = ({ title, body, footer }) => {
   const globalStates = useSelector((state) => { return state.global });
   //console.log('globalStates--->', globalStates);
@@ -37,6 +38,8 @@ const ModelBoxComponent = ({ title, body, footer }) => {
       aria-describedby="parent-modal-description"
     >
       <Box sx={{ ...style, width: 400 }}>
+        <h3>{title}</h3>
+        <Divider />
         {body}
       </Box>
     </Modal>
